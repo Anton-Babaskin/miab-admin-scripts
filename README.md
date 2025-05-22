@@ -1,5 +1,5 @@
 👋 Hi, I’m Anton Babaskin (@z3r0-gr4v1tY)  
-🧠 DevOps / Infrastructure Architect focused on Linux-first environments, mail systems, and automation.  
+🧠 System Engineer / Infrastructure Architect focused on Linux-first environments, mail systems, virtualisation, monitoring and automation.  
 🌍 I manage distributed systems for trading/enterprise teams — and build tools to make admin life easier.
 
 # 🛠️ Mail-in-a-Box Admin Scripts
