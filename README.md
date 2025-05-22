@@ -16,9 +16,7 @@ Everything here is field-tested in real-world infrastructure (multi-domain, Post
 🗄️ Ideal for off-site backups via key-authenticated SFTP targets.  
 🧹 Automatically removes old archives from the remote server.  
 📲 Sends success/failure alerts to your Telegram bot (optional).
-
 #### ⚙️ Configuration
-
 ```bash
 SFTP_USER="your_sftp_username"
 SFTP_HOST="your.sftp.server"
@@ -29,6 +27,14 @@ SOURCE_DIR="/home/user-data"
 BOT_TOKEN="your_telegram_bot_token"   # Optional
 CHAT_ID="your_telegram_chat_id"       # Optional
 ```
+### 💡Examples of use:
+Create a backup and upload it to an SFTP server:
+```bash
+chmod +x backup_sftp.sh
+./backup_sftp.sh
+```
+An archive named backup-YYYY-MM-DD_HH-MM-SS.tar.gz will be created in the temporary folder, uploaded to the specified SFTP server, and deleted locally. If BOT_TOKEN and CHAT_ID are set, the script will send a notification to Telegram.
+
 ### ☁️ backup_restic_webdav.sh
 💾 Performs secure, incremental backups using Restic + Rclone to a WebDAV-compatible cloud storage (e.g. Hetzner Storage Box).
 🔐 All data is encrypted client-side using a strong password.
@@ -47,9 +53,17 @@ CHAT_ID="your_telegram_chat_id"       # Optional
 
 BACKUP_SOURCE="/home/user-data"
  ```
+### 💡Examples of use:
+ ```bash
+chmod +x restic_rclone_webdav.sh
+./restic_rclone_webdav.sh
+```
+The script creates an encrypted Restic backup of the /home/user-data directory using rclone to sync with a remote WebDAV storage.
+
+If BOT_TOKEN and CHAT_ID are set, the script will also send a success/failure status message to Telegram.
+
 ### 🕵️ postgrey_notify_telegram.sh
 Monitors Postgrey greylisting events and sends real-time alerts to a Telegram bot.
-
 🔔 Sends two types of alerts:
 ⚠️ When a sender is greylisted
 ✅ When the same sender later successfully delivers a message
@@ -79,7 +93,15 @@ postgrey[1234]: delayed SMTP connection from mail.example.com[192.100.200.77]
 192.100.200.77
 Message successfully delivered.
 ```
+
+```bash
+chmod +x postgrey_notify_telegram.sh
+./postgrey_notify_telegram.sh
+```
+The script saves already processed entries to /var/tmp/postgrey-notify.state and only sends new greylisted IP addresses to Telegram.
+
 ⚙️ Requirements
+
 ```bash
 ✅ Mail-in-a-Box v60+
 🐧 Linux (Ubuntu recommended)
