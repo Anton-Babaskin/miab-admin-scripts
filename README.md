@@ -34,6 +34,12 @@ chmod +x backup_sftp.sh
 ./backup_sftp.sh
 ```
 An archive named backup-YYYY-MM-DD_HH-MM-SS.tar.gz will be created in the temporary folder, uploaded to the specified SFTP server, and deleted locally. If BOT_TOKEN and CHAT_ID are set, the script will send a notification to Telegram.
+### ⚠️ Critical Backup Warning
+Mail-in-a-Box uses internal encryption for some backup data.
+The critical file backup/secret_key.txt inside /home/user-data is required to decrypt and restore backups.
+### ⚠️ Don't lose it! Store a copy of this file in a secure location — outside your primary server — along with your backups.
+### ⚠️ Without this file, full data recovery is not possible, even if the rest of the files are intact.
+
 
 ### ☁️ backup_restic_webdav.sh
 💾 Performs secure, incremental backups using Restic + Rclone to a WebDAV-compatible cloud storage (e.g. Hetzner Storage Box).
