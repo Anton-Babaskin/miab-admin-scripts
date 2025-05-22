@@ -29,7 +29,7 @@ SOURCE_DIR="/home/user-data"
 BOT_TOKEN="your_telegram_bot_token"   # Optional
 CHAT_ID="your_telegram_chat_id"       # Optional
 ```
-### ☁️ backup_restic_webdav.sh**
+### ☁️ backup_restic_webdav.sh
 💾 Performs secure, incremental backups using Restic + Rclone to a WebDAV-compatible cloud storage (e.g. Hetzner Storage Box).
 🔐 All data is encrypted client-side using a strong password.
 🧹 Supports snapshot pruning (daily/weekly/monthly).
@@ -47,7 +47,7 @@ CHAT_ID="your_telegram_chat_id"       # Optional
 
 BACKUP_SOURCE="/home/user-data"
  ```
-### 🕵️ postgrey_notify_telegram.sh**
+### 🕵️ postgrey_notify_telegram.sh
 Monitors Postgrey greylisting events and sends real-time alerts to a Telegram bot.
 
 🔔 Sends two types of alerts:
