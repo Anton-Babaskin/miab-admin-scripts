@@ -80,15 +80,16 @@ Internal state files used:
 
 /var/lib/postgrey-passed.log — IPs that passed greylisting
  
-🕒 Cron example
-
+🕒 Cron example:
+```bash
 */2 * * * * /path/to/postgrey_notify_telegram.sh
-📲 Telegram messages
-
-
+```
+```bash
+📲 Telegram messages:
 ⚠️ New greylisted sender:
 postgrey[1234]: delayed SMTP connection from mail.example.com[192.100.200.77]
-
+```
+```bash
 ✅ Greylisted sender passed:
 192.100.200.77
 Message successfully delivered.
