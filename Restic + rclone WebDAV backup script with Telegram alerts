@@ -1,0 +1,63 @@
+#!/bin/bash
+
+# === CONFIGURATION ===
+
+# Rclone remote name and path (configured via `rclone config`)
+RCLONE_REMOTE="your_rclone_remote:your/backup/path"      # ← YOUR RCLONE CONFIG NAME & DEST
+RESTIC_REPOSITORY="rclone:$RCLONE_REMOTE"
+RESTIC_PASSWORD="your_secure_restic_password"            # ← YOUR RESTIC PASSWORD
+
+# Telegram (optional)
+BOT_TOKEN="your_telegram_bot_token"                       # ← YOUR TELEGRAM BOT TOKEN
+CHAT_ID="your_telegram_chat_id"                           # ← YOUR TELEGRAM CHAT ID
+
+# What to back up
+BACKUP_SOURCE="/home/user-data"
+HOSTNAME=$(hostname)
+LOG_FILE="/var/log/restic_webdav_backup.log"
+
+# Retention policy (snapshots)
+KEEP_DAILY=7
+KEEP_WEEKLY=4
+KEEP_MONTHLY=6
+
+# === FUNCTIONS ===
+
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" | tee -a "$LOG_FILE"
+}
+
+send_telegram() {
+    [[ -z "$BOT_TOKEN" || -z "$CHAT_ID" ]] && return
+    curl -s -X POST https://api.telegram.org/bot${BOT_TOKEN}/sendMessage \
+         -d chat_id="${CHAT_ID}" \
+         -d text="$1"
+}
+
+# === START BACKUP ===
+
+log "🚀 Starting restic backup to WebDAV..."
+export RESTIC_REPOSITORY
+export RESTIC_PASSWORD
+
+restic backup "$BACKUP_SOURCE" --hostname "$HOSTNAME" >>"$LOG_FILE" 2>&1
+
+if [[ $? -ne 0 ]]; then
+    log "Restic backup failed!"
+    send_telegram "❌ Restic backup FAILED on $HOSTNAME"
+    exit 1
+fi
+
+log "Backup completed."
+send_telegram "✅ Restic backup completed on $HOSTNAME"
+
+# === Apply retention policy ===
+
+log "Applying retention policy: daily=$KEEP_DAILY, weekly=$KEEP_WEEKLY, monthly=$KEEP_MONTHLY"
+
+restic forget --keep-daily $KEEP_DAILY --keep-weekly $KEEP_WEEKLY --keep-monthly $KEEP_MONTHLY --prune >>"$LOG_FILE" 2>&1
+
+log "Retention policy applied."
+send_telegram "📦 Restic retention policy applied on $HOSTNAME"
+
+exit 0
